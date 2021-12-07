@@ -1,22 +1,35 @@
-import 'advent2.dart';
+import 'package:advent1/advent3_data.dart';
 import 'package:darq/darq.dart';
 
-import 'advent3_data.dart';
+import 'advent2.dart';
 
 class Advent3 {
   void run() {
-    print(5.toRadixString(2));
-    print(Submarine3().gammaRate(debugData));
+    final sub = Submarine3();
+    sub.assignGammaRate(data);
+    sub.assignEpsilonRate(data);
+
+    print(sub.powerConsumption);
   }
 }
 
 class Submarine3 extends Submarine {
-  int powerConsumption = 0;
+  int gammaRate = 0;
+  int epsilonRate = 0;
+  int get powerConsumption => gammaRate * epsilonRate;
 
-  String gammaRate(List<String> bits) {
+  void assignGammaRate(List<String> bits) {
+    gammaRate = _calculateGammaRate(bits);
+  }
+
+  void assignEpsilonRate(List<String> bits) {
+    epsilonRate = _calculateEpsilonRate(bits);
+  }
+
+  int _calculateGammaRate(List<String> bits) {
     String gammaRate = '';
 
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < bits[0].length; i++) {
       final oneCount = bits
           .select((bit, index) => bit[i])
           .where((bit) => bit == '1')
@@ -27,9 +40,31 @@ class Submarine3 extends Submarine {
           .where((bit) => bit == '0')
           .count();
 
-      gammaRate += oneCount > zeroCount ? '1' : '0';
+      gammaRate += oneCount >= zeroCount ? '1' : '0';
     }
 
-    return gammaRate;
+    print('Gamma Rate: $gammaRate');
+    return int.parse(gammaRate, radix: 2);
+  }
+
+  int _calculateEpsilonRate(List<String> bits) {
+    String epsilonRate = '';
+
+    for (int i = 0; i < bits[0].length; i++) {
+      final oneCount = bits
+          .select((bit, index) => bit[i])
+          .where((bit) => bit == '1')
+          .count();
+
+      final zeroCount = bits
+          .select((bit, index) => bit[i])
+          .where((bit) => bit == '0')
+          .count();
+
+      epsilonRate += oneCount > zeroCount ? '0' : '1';
+    }
+
+    print('Epsilon Rate: $epsilonRate');
+    return int.parse(epsilonRate, radix: 2);
   }
 }
