@@ -1,5 +1,5 @@
-import 'package:advent1/advent3.dart';
+import 'package:advent1/advent4.dart';
 
 void main(List<String> arguments) {
-  Advent3().run();
+  Advent4().run();
 }
